@@ -1,0 +1,1216 @@
+
+"openapi": "3.0.0"
+"info":
+  "title": "Pet Store API"
+  "description": "API para gestionar una tienda de mascotas, incluyendo productos y categorías."
+  "version": "1.0.0"
+"paths":
+  "/api/products":
+    "get":
+      "summary": "Listar productos"
+      "description": "Devuelve una lista de productos con filtros opcionales por categoría y tipo de animal."
+      "parameters":
+        -
+          "name": "category"
+          "in": "query"
+          "description": "Filtra productos por categoría."
+          "schema":
+            "type": "string"
+        -
+          "name": "animalType"
+          "in": "query"
+          "description": "Filtra productos por tipo de animal."
+          "schema":
+            "type": "string"
+        -
+          "name": "page"
+          "in": "query"
+          "description": "Página de resultados (para paginación)."
+          "schema":
+            "type": "integer"
+            "default": 1
+        -
+          "name": "limit"
+          "in": "query"
+          "description": "Número de productos por página."
+          "schema":
+            "type": "integer"
+            "default": 10
+      "responses":
+        "200":
+          "description": "Lista de productos obtenida con éxito."
+          "content":
+            "application/json":
+              "schema":
+                "type": "array"
+                "items":
+                  "type": "object"
+                  "properties":
+                    "id":
+                      "type": "string"
+                    "name":
+                      "type": "string"
+                    "category":
+                      "type": "string"
+                    "animalType":
+                      "type": "string"
+                    "price":
+                      "type": "number"
+                    "inStock":
+                      "type": "boolean"
+    "post":
+      "summary": "Crear un nuevo producto"
+      "description": "Crea un nuevo producto en la tienda. Solo los administradores pueden acceder a este endpoint."
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "type": "object"
+              "properties":
+                "name":
+                  "type": "string"
+                  "description": "Nombre del producto."
+                "description":
+                  "type": "string"
+                  "description": "Descripción del producto."
+                "category":
+                  "type": "string"
+                  "description": "Categoría a la que pertenece el producto."
+                "animalType":
+                  "type": "string"
+                  "description": "Tipo de animal al que va destinado el producto."
+                "price":
+                  "type": "number"
+                  "description": "Precio del producto."
+                "inStock":
+                  "type": "boolean"
+                  "description": "Indica si el producto está en stock."
+      "responses":
+        "201":
+          "description": "Producto creado con éxito."
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "id":
+                    "type": "string"
+                  "name":
+                    "type": "string"
+                  "description":
+                    "type": "string"
+                  "category":
+                    "type": "string"
+                  "animalType":
+                    "type": "string"
+                  "price":
+                    "type": "number"
+                  "inStock":
+                    "type": "boolean"
+        "400":
+          "description": "Datos de entrada inválidos."
+        "401":
+          "description": "No autorizado. Solo administradores pueden realizar esta operación."
+  "/api/products/{productId}":
+    "get":
+      "summary": "Obtener detalles de un producto"
+      "description": "Devuelve la información detallada de un producto específico identificado por su ID."
+      "parameters":
+        -
+          "name": "productId"
+          "in": "path"
+          "required": true
+          "description": "ID del producto a obtener."
+          "schema":
+            "type": "string"
+      "responses":
+        "200":
+          "description": "Detalles del producto obtenidos con éxito."
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "id":
+                    "type": "string"
+                  "name":
+                    "type": "string"
+                  "description":
+                    "type": "string"
+                  "category":
+                    "type": "string"
+                  "animalType":
+                    "type": "string"
+                  "price":
+                    "type": "number"
+                  "inStock":
+                    "type": "boolean"
+        "404":
+          "description": "Producto no encontrado."
+    "put":
+      "summary": "Actualizar un producto"
+      "description": "Actualiza la información de un producto específico. Solo los administradores pueden acceder a este endpoint."
+      "parameters":
+        -
+          "name": "productId"
+          "in": "path"
+          "required": true
+          "description": "ID del producto a actualizar."
+          "schema":
+            "type": "string"
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "type": "object"
+              "properties":
+                "name":
+                  "type": "string"
+                  "description": "Nombre actualizado del producto."
+                "description":
+                  "type": "string"
+                  "description": "Descripción actualizada del producto."
+                "category":
+                  "type": "string"
+                  "description": "Categoría actualizada del producto."
+                "animalType":
+                  "type": "string"
+                  "description": "Tipo de animal actualizado para el producto."
+                "price":
+                  "type": "number"
+                  "description": "Precio actualizado del producto."
+                "inStock":
+                  "type": "boolean"
+                  "description": "Indica si el producto está disponible en inventario."
+      "responses":
+        "200":
+          "description": "Producto actualizado con éxito."
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "id":
+                    "type": "string"
+                  "name":
+                    "type": "string"
+                  "description":
+                    "type": "string"
+                  "category":
+                    "type": "string"
+                  "animalType":
+                    "type": "string"
+                  "price":
+                    "type": "number"
+                  "inStock":
+                    "type": "boolean"
+        "400":
+          "description": "Datos de entrada inválidos."
+        "401":
+          "description": "No autorizado. Solo administradores pueden realizar esta operación."
+        "404":
+          "description": "Producto no encontrado."
+    "delete":
+      "summary": "Eliminar un producto"
+      "description": "Elimina un producto específico de la tienda. Solo los administradores pueden acceder a este endpoint."
+      "parameters":
+        -
+          "name": "productId"
+          "in": "path"
+          "required": true
+          "description": "ID del producto a eliminar."
+          "schema":
+            "type": "string"
+      "responses":
+        "204":
+          "description": "Producto eliminado con éxito."
+        "401":
+          "description": "No autorizado. Solo administradores pueden realizar esta operación."
+        "404":
+          "description": "Producto no encontrado."
+  "/api/categories":
+    "get":
+      "summary": "Listar categorías"
+      "description": "Devuelve una lista de todas las categorías disponibles en la tienda."
+      "responses":
+        "200":
+          "description": "Lista de categorías obtenida con éxito."
+          "content":
+            "application/json":
+              "schema":
+                "type": "array"
+                "items":
+                  "type": "object"
+                  "properties":
+                    "id":
+                      "type": "string"
+                    "name":
+                      "type": "string"
+                    "description":
+                      "type": "string"
+    "post":
+      "summary": "Crear una nueva categoría"
+      "description": "Crea una nueva categoría en la tienda. Solo los administradores pueden acceder a este endpoint."
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "type": "object"
+              "properties":
+                "name":
+                  "type": "string"
+                  "description": "Nombre de la categoría."
+                "description":
+                  "type": "string"
+                  "description": "Descripción de la categoría."
+      "responses":
+        "201":
+          "description": "Categoría creada con éxito."
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "id":
+                    "type": "string"
+                  "name":
+                    "type": "string"
+                  "description":
+                    "type": "string"
+        "400":
+          "description": "Datos de entrada inválidos."
+        "401":
+          "description": "No autorizado. Solo administradores pueden realizar esta operación."
+  "/api/categories/{categoryId}":
+    "get":
+      "summary": "Obtener detalles de una categoría"
+      "description": "Devuelve la información detallada de una categoría específica identificada por su ID."
+      "parameters":
+        -
+          "name": "categoryId"
+          "in": "path"
+          "required": true
+          "description": "ID de la categoría a obtener."
+          "schema":
+            "type": "string"
+      "responses":
+        "200":
+          "description": "Detalles de la categoría obtenidos con éxito."
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "id":
+                    "type": "string"
+                  "name":
+                    "type": "string"
+                  "description":
+                    "type": "string"
+        "404":
+          "description": "Categoría no encontrada."
+    "put":
+      "summary": "Actualizar una categoría"
+      "description": "Actualiza la información de una categoría específica. Solo los administradores pueden acceder a este endpoint."
+      "parameters":
+        -
+          "name": "categoryId"
+          "in": "path"
+          "required": true
+          "description": "ID de la categoría a actualizar."
+          "schema":
+            "type": "string"
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "type": "object"
+              "properties":
+                "name":
+                  "type": "string"
+                  "description": "Nombre actualizado de la categoría."
+                "description":
+                  "type": "string"
+                  "description": "Descripción actualizada de la categoría."
+      "responses":
+        "200":
+          "description": "Categoría actualizada con éxito."
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "id":
+                    "type": "string"
+                  "name":
+                    "type": "string"
+                  "description":
+                    "type": "string"
+        "400":
+          "description": "Datos de entrada inválidos."
+        "401":
+          "description": "No autorizado. Solo administradores pueden realizar esta operación."
+        "404":
+          "description": "Categoría no encontrada."
+    "delete":
+      "summary": "Eliminar una categoría"
+      "description": "Elimina una categoría específica de la tienda. Solo los administradores pueden acceder a este endpoint."
+      "parameters":
+        -
+          "name": "categoryId"
+          "in": "path"
+          "required": true
+          "description": "ID de la categoría a eliminar."
+          "schema":
+            "type": "string"
+      "responses":
+        "204":
+          "description": "Categoría eliminada con éxito."
+        "401":
+          "description": "No autorizado. Solo administradores pueden realizar esta operación."
+        "404":
+          "description": "Categoría"
+  "/api/users/register":
+    "post":
+      "summary": "Registrar un nuevo usuario"
+      "description": "Crea un nuevo usuario en la tienda."
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "type": "object"
+              "properties":
+                "username":
+                  "type": "string"
+                  "description": "Nombre de usuario del nuevo usuario."
+                "email":
+                  "type": "string"
+                  "description": "Correo electrónico del nuevo usuario."
+                "password":
+                  "type": "string"
+                  "description": "Contraseña del nuevo usuario."
+      "responses":
+        "201":
+          "description": "Usuario registrado con éxito."
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "id":
+                    "type": "string"
+                  "username":
+                    "type": "string"
+                  "email":
+                    "type": "string"
+        "400":
+          "description": "Datos de entrada inválidos."
+  "/api/users/login":
+    "post":
+      "summary": "Iniciar sesión"
+      "description": "Permite a un usuario autenticarse en la tienda."
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "type": "object"
+              "properties":
+                "email":
+                  "type": "string"
+                  "description": "Correo electrónico del usuario."
+                "password":
+                  "type": "string"
+                  "description": "Contraseña del usuario."
+      "responses":
+        "200":
+          "description": "Inicio de sesión exitoso."
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "token":
+                    "type": "string"
+                    "description": "Token de autenticación del usuario."
+        "401":
+          "description": "Credenciales inválidas."
+  "/api/users/profile":
+    "get":
+      "summary": "Obtener perfil de usuario"
+      "description": "Devuelve la información del perfil del usuario autenticado."
+      "responses":
+        "200":
+          "description": "Información del perfil obtenida con éxito."
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "id":
+                    "type": "string"
+                  "username":
+                    "type": "string"
+                  "email":
+                    "type": "string"
+    "put":
+      "summary": "Actualizar perfil de usuario"
+      "description": "Actualiza la información del perfil del usuario autenticado."
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "type": "object"
+              "properties":
+                "username":
+                  "type": "string"
+                  "description": "Nuevo nombre de usuario."
+                "email":
+                  "type": "string"
+                  "description": "Nuevo correo electrónico."
+      "responses":
+        "200":
+          "description": "Perfil actualizado con éxito."
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "id":
+                    "type": "string"
+                  "username":
+                    "type": "string"
+                  "email":
+                    "type": "string"
+        "400":
+          "description": "Datos de entrada inválidos."
+  "/api/users/addresses":
+    "get":
+      "summary": "Listar direcciones de envío"
+      "description": "Devuelve una lista de direcciones de envío asociadas al usuario autenticado."
+      "responses":
+        "200":
+          "description": "Lista de direcciones obtenida con éxito."
+          "content":
+            "application/json":
+              "schema":
+                "type": "array"
+                "items":
+                  "type": "object"
+                  "properties":
+                    "id":
+                      "type": "string"
+                    "street":
+                      "type": "string"
+                    "city":
+                      "type": "string"
+                    "state":
+                      "type": "string"
+                    "zipCode":
+                      "type": "string"
+    "post":
+      "summary": "Agregar dirección de envío"
+      "description": "Crea una nueva dirección de envío para el usuario autenticado."
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "type": "object"
+              "properties":
+                "street":
+                  "type": "string"
+                  "description": "Calle de la dirección."
+                "city":
+                  "type": "string"
+                  "description": "Ciudad de la dirección."
+                "state":
+                  "type": "string"
+                  "description": "Estado de la dirección."
+                "zipCode":
+                  "type": "string"
+                  "description": "Código postal de la dirección."
+      "responses":
+        "201":
+          "description": "Dirección de envío creada con éxito."
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "id":
+                    "type": "string"
+                  "street":
+                    "type": "string"
+                  "city":
+                    "type": "string"
+                  "state":
+                    "type": "string"
+                  "zipCode":
+                    "type": "string"
+        "400":
+          "description": "Datos de entrada inválidos."
+  "/api/users/addresses/{addressId}":
+    "put":
+      "summary": "Actualizar dirección de envío"
+      "description": "Actualiza una dirección de envío específica del usuario autenticado."
+      "parameters":
+        -
+          "name": "addressId"
+          "in": "path"
+          "required": true
+          "description": "ID de la dirección de envío a actualizar."
+          "schema":
+            "type": "string"
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "type": "object"
+              "properties":
+                "street":
+                  "type": "string"
+                  "description": "Nueva calle de la dirección."
+                "city":
+                  "type": "string"
+                  "description": "Nueva ciudad de la dirección."
+                "state":
+                  "type": "string"
+                  "description": "Nuevo estado de la dirección."
+                "zipCode":
+                  "type": "string"
+                  "description": "Nuevo código postal de la dirección."
+      "responses":
+        "200":
+          "description": "Dirección de envío actualizada con éxito."
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "id":
+                    "type": "string"
+                  "street":
+                    "type": "string"
+                  "city":
+                    "type": "string"
+                  "state":
+                    "type": "string"
+                  "zipCode":
+                    "type": "string"
+        "400":
+          "description": "Datos de entrada inválidos."
+        "404":
+          "description": "Dirección no encontrada."
+    "delete":
+      "summary": "Eliminar dirección de envío"
+      "description": "Elimina una dirección de envío específica del usuario autenticado."
+      "parameters":
+        -
+          "name": "addressId"
+          "in": "path"
+          "required": true
+          "description": "ID de la dirección de envío a eliminar."
+          "schema":
+            "type": "string"
+      "responses":
+        "204":
+          "description": "Dirección de envío eliminada con éxito."
+        "404":
+          "description": "Dirección no encontrada."
+  "/api/cart":
+    "get":
+      "summary": "Obtener carrito actual"
+      "description": "Devuelve los items en el carrito de compras del usuario autenticado."
+      "responses":
+        "200":
+          "description": "Carrito obtenido con éxito."
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "items":
+                    "type": "array"
+                    "items":
+                      "type": "object"
+                      "properties":
+                        "id":
+                          "type": "string"
+                        "productId":
+                          "type": "string"
+                        "quantity":
+                          "type": "integer"
+    "delete":
+      "summary": "Vaciar carrito"
+      "description": "Elimina todos los items del carrito de compras del usuario autenticado."
+      "responses":
+        "204":
+          "description": "Carrito vaciado con éxito."
+  "/api/cart/items":
+    "post":
+      "summary": "Agregar producto al carrito"
+      "description": "Añade un producto al carrito de compras del usuario autenticado."
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "type": "object"
+              "properties":
+                "productId":
+                  "type": "string"
+                  "description": "ID del producto a agregar al carrito."
+                "quantity":
+                  "type": "integer"
+                  "description": "Cantidad del producto a agregar (por defecto 1)."
+      "responses":
+        "201":
+          "description": "Producto agregado al carrito con éxito."
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "id":
+                    "type": "string"
+                  "productId":
+                    "type": "string"
+                  "quantity":
+                    "type": "integer"
+        "400":
+          "description": "Datos de entrada inválidos."
+  "/api/cart/items/{itemId}":
+    "put":
+      "summary": "Actualizar cantidad de un producto en el carrito"
+      "description": "Modifica la cantidad de un producto específico en el carrito de compras del usuario autenticado."
+      "parameters":
+        -
+          "name": "itemId"
+          "in": "path"
+          "required": true
+          "description": "ID del item en el carrito a actualizar."
+          "schema":
+            "type": "string"
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "type": "object"
+              "properties":
+                "quantity":
+                  "type": "integer"
+                  "description": "Nueva cantidad del producto."
+      "responses":
+        "200":
+          "description": "Cantidad actualizada con éxito."
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "id":
+                    "type": "string"
+                  "productId":
+                    "type": "string"
+                  "quantity":
+                    "type": "integer"
+        "400":
+          "description": "Datos de entrada inválidos."
+        "404":
+          "description": "Item no encontrado."
+    "delete":
+      "summary": "Eliminar producto del carrito"
+      "description": "Elimina un producto específico del carrito de compras del usuario autenticado."
+      "parameters":
+        -
+          "name": "itemId"
+          "in": "path"
+          "required": true
+          "description": "ID del item a eliminar."
+          "schema":
+            "type": "string"
+      "responses":
+        "204":
+          "description": "Producto eliminado del carrito con éxito."
+        "404":
+          "description": "Item no encontrado."
+  "/api/orders":
+    "post":
+      "summary": "Crear un nuevo pedido"
+      "description": "Crea un nuevo pedido a partir del carrito de compras del usuario autenticado."
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "type": "object"
+              "properties":
+                "addressId":
+                  "type": "string"
+                  "description": "ID de la dirección de envío para el pedido."
+                "paymentMethod":
+                  "type": "string"
+                  "description": "Método de pago utilizado para el pedido."
+      "responses":
+        "201":
+          "description": "Pedido creado con éxito."
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "orderId":
+                    "type": "string"
+                  "status":
+                    "type": "string"
+                    "enum":
+                      - "pending"
+                      - "completed"
+                      - "cancelled"
+                  "totalAmount":
+                    "type": "number"
+        "400":
+          "description": "Datos de entrada inválidos."
+    "get":
+      "summary": "Listar pedidos del usuario"
+      "description": "Devuelve una lista de todos los pedidos realizados por el usuario autenticado."
+      "responses":
+        "200":
+          "description": "Lista de pedidos obtenida con éxito."
+          "content":
+            "application/json":
+              "schema":
+                "type": "array"
+                "items":
+                  "type": "object"
+                  "properties":
+                    "orderId":
+                      "type": "string"
+                    "status":
+                      "type": "string"
+                      "enum":
+                        - "pending"
+                        - "completed"
+                        - "cancelled"
+                    "totalAmount":
+                      "type": "number"
+  "/api/orders/{orderId}":
+    "get":
+      "summary": "Obtener detalles de un pedido"
+      "description": "Devuelve la información detallada de un pedido específico identificado por su ID."
+      "parameters":
+        -
+          "name": "orderId"
+          "in": "path"
+          "required": true
+          "description": "ID del pedido a obtener."
+          "schema":
+            "type": "string"
+      "responses":
+        "200":
+          "description": "Detalles del pedido obtenidos con éxito."
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "orderId":
+                    "type": "string"
+                  "status":
+                    "type": "string"
+                    "enum":
+                      - "pending"
+                      - "completed"
+                      - "cancelled"
+                  "totalAmount":
+                    "type": "number"
+                  "items":
+                    "type": "array"
+                    "items":
+                      "type": "object"
+                      "properties":
+                        "productId":
+                          "type": "string"
+                        "quantity":
+                          "type": "integer"
+        "404":
+          "description": "Pedido no encontrado."
+    "post":
+      "summary": "Cancelar un pedido"
+      "description": "Cancela un pedido específico si se permite hacerlo."
+      "parameters":
+        -
+          "name": "orderId"
+          "in": "path"
+          "required": true
+          "description": "ID del pedido a cancelar."
+          "schema":
+            "type": "string"
+      "responses":
+        "204":
+          "description": "Pedido cancelado con éxito."
+        "404":
+          "description": "Pedido no encontrado."
+        "400":
+          "description": "Cancelación no permitida para este pedido."
+  "/api/products/{productId}/reviews":
+    "get":
+      "summary": "Listar reseñas de un producto"
+      "description": "Devuelve una lista de todas las reseñas asociadas a un producto específico identificado por su ID."
+      "parameters":
+        -
+          "name": "productId"
+          "in": "path"
+          "required": true
+          "description": "ID del producto cuyas reseñas se desean obtener."
+          "schema":
+            "type": "string"
+      "responses":
+        "200":
+          "description": "Lista de reseñas obtenida con éxito."
+          "content":
+            "application/json":
+              "schema":
+                "type": "array"
+                "items":
+                  "type": "object"
+                  "properties":
+                    "reviewId":
+                      "type": "string"
+                    "rating":
+                      "type": "integer"
+                      "minimum": 1
+                      "maximum": 5
+                    "comment":
+                      "type": "string"
+                    "userId":
+                      "type": "string"
+    "post":
+      "summary": "Agregar una reseña a un producto"
+      "description": "Crea una nueva reseña para un producto específico. Solo usuarios autenticados pueden agregar reseñas."
+      "parameters":
+        -
+          "name": "productId"
+          "in": "path"
+          "required": true
+          "description": "ID del producto al que se desea agregar la reseña."
+          "schema":
+            "type": "string"
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "type": "object"
+              "properties":
+                "rating":
+                  "type": "integer"
+                  "minimum": 1
+                  "maximum": 5
+                  "description": "Valoración del producto (1 a 5)."
+                "comment":
+                  "type": "string"
+                  "description": "Comentario sobre el producto."
+      "responses":
+        "201":
+          "description": "Reseña creada con éxito."
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "reviewId":
+                    "type": "string"
+                  "rating":
+                    "type": "integer"
+                  "comment":
+                    "type": "string"
+        "400":
+          "description": "Datos de entrada inválidos."
+        "401":
+          "description": "Usuario no autenticado."
+  "/api/products/{productId}/reviews/{reviewId}":
+    "put":
+      "summary": "Actualizar una reseña"
+      "description": "Actualiza una reseña existente de un producto específico."
+      "parameters":
+        -
+          "name": "productId"
+          "in": "path"
+          "required": true
+          "description": "ID del producto al que pertenece la reseña."
+          "schema":
+            "type": "string"
+        -
+          "name": "reviewId"
+          "in": "path"
+          "required": true
+          "description": "ID de la reseña a actualizar."
+          "schema":
+            "type": "string"
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "type": "object"
+              "properties":
+                "rating":
+                  "type": "integer"
+                  "minimum": 1
+                  "maximum": 5
+                  "description": "Nueva valoración del producto (1 a 5)."
+                "comment":
+                  "type": "string"
+                  "description": "Nuevo comentario sobre el producto."
+      "responses":
+        "200":
+          "description": "Reseña actualizada con éxito."
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "reviewId":
+                    "type": "string"
+                  "rating":
+                    "type": "integer"
+                  "comment":
+                    "type": "string"
+        "404":
+          "description": "Reseña no encontrada."
+        "400":
+          "description": "Datos de entrada inválidos."
+    "delete":
+      "summary": "Eliminar una reseña"
+      "description": "Elimina una reseña existente de un producto específico."
+      "parameters":
+        -
+          "name": "productId"
+          "in": "path"
+          "required": true
+          "description": "ID del producto al que pertenece la reseña."
+          "schema":
+            "type": "string"
+        -
+          "name": "reviewId"
+          "in": "path"
+          "required": true
+          "description": "ID de la reseña a eliminar."
+          "schema":
+            "type": "string"
+      "responses":
+        "204":
+          "description": "Reseña eliminada con éxito."
+        "404":
+          "description": "Reseña no encontrada."
+  "/api/search":
+    "get":
+      "summary": "Búsqueda general"
+      "description": "Realiza una búsqueda general en la tienda utilizando un término de búsqueda y un tipo específico."
+      "parameters":
+        -
+          "name": "q"
+          "in": "query"
+          "required": true
+          "description": "Término de búsqueda que se desea buscar en la tienda."
+          "schema":
+            "type": "string"
+        -
+          "name": "type"
+          "in": "query"
+          "required": false
+          "description": "Tipo de entidad a buscar (por ejemplo, productos, categorías)."
+          "schema":
+            "type": "string"
+            "enum":
+              - "productos"
+              - "categorias"
+      "responses":
+        "200":
+          "description": "Resultados de búsqueda obtenidos con éxito."
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "products":
+                    "type": "array"
+                    "items":
+                      "type": "object"
+                      "properties":
+                        "id":
+                          "type": "string"
+                        "name":
+                          "type": "string"
+                        "category":
+                          "type": "string"
+                        "animalType":
+                          "type": "string"
+                        "price":
+                          "type": "number"
+                        "inStock":
+                          "type": "boolean"
+                  "categories":
+                    "type": "array"
+                    "items":
+                      "type": "object"
+                      "properties":
+                        "id":
+                          "type": "string"
+                        "name":
+                          "type": "string"
+                        "description":
+                          "type": "string"
+        "400":
+          "description": "Parámetros de búsqueda inválidos."
+  "/api/pets":
+    "get":
+      "summary": "Listar mascotas del usuario"
+      "description": "Devuelve una lista de mascotas asociadas al usuario."
+      "responses":
+        "200":
+          "description": "Lista de mascotas obtenida con éxito."
+          "content":
+            "application/json":
+              "schema":
+                "type": "array"
+                "items":
+                  "type": "object"
+                  "properties":
+                    "id":
+                      "type": "string"
+                    "name":
+                      "type": "string"
+                    "breed":
+                      "type": "string"
+                    "age":
+                      "type": "integer"
+                    "type":
+                      "type": "string"
+                    "ownerId":
+                      "type": "string"
+    "post":
+      "summary": "Agregar una mascota"
+      "description": "Agrega una nueva mascota asociada al usuario."
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "type": "object"
+              "properties":
+                "name":
+                  "type": "string"
+                  "description": "Nombre de la mascota."
+                "breed":
+                  "type": "string"
+                  "description": "Raza de la mascota."
+                "age":
+                  "type": "integer"
+                  "description": "Edad de la mascota."
+                "type":
+                  "type": "string"
+                  "description": "Tipo de mascota (por ejemplo, perro, gato)."
+      "responses":
+        "201":
+          "description": "Mascota creada con éxito."
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "id":
+                    "type": "string"
+                  "name":
+                    "type": "string"
+                  "breed":
+                    "type": "string"
+                  "age":
+                    "type": "integer"
+                  "type":
+                    "type": "string"
+                  "ownerId":
+                    "type": "string"
+        "400":
+          "description": "Datos de entrada inválidos."
+  "/api/pets/{petId}":
+    "put":
+      "summary": "Actualizar información de una mascota"
+      "description": "Actualiza la información de una mascota específica."
+      "parameters":
+        -
+          "name": "petId"
+          "in": "path"
+          "required": true
+          "description": "ID de la mascota a actualizar."
+          "schema":
+            "type": "string"
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "type": "object"
+              "properties":
+                "name":
+                  "type": "string"
+                  "description": "Nombre actualizado de la mascota."
+                "breed":
+                  "type": "string"
+                  "description": "Raza actualizada de la mascota."
+                "age":
+                  "type": "integer"
+                  "description": "Edad actualizada de la mascota."
+                "type":
+                  "type": "string"
+                  "description": "Tipo actualizado de mascota."
+      "responses":
+        "200":
+          "description": "Mascota actualizada con éxito."
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "id":
+                    "type": "string"
+                  "name":
+                    "type": "string"
+                  "breed":
+                    "type": "string"
+                  "age":
+                    "type": "integer"
+                  "type":
+                    "type": "string"
+                  "ownerId":
+                    "type": "string"
+        "400":
+          "description": "Datos de entrada inválidos."
+        "404":
+          "description": "Mascota no encontrada."
+    "delete":
+      "summary": "Eliminar una mascota"
+      "description": "Elimina una mascota específica asociada al usuario."
+      "parameters":
+        -
+          "name": "petId"
+          "in": "path"
+          "required": true
+          "description": "ID de la mascota a eliminar."
+          "schema":
+            "type": "string"
+      "responses":
+        "204":
+          "description": "Mascota eliminada con éxito."
+        "404":
+          "description": "Mascota no encontrada."
